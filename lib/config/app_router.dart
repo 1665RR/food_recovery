@@ -5,6 +5,7 @@ import 'package:food_app/screens/home/home_screen.dart';
 import 'package:food_app/screens/location//location_screen.dart';
 import 'package:food_app/screens/shops_details/shop_details.dart';
 
+import '../models/shop_model.dart';
 import '../screens/filter/filter.dart';
 import '../screens/shops/shop.dart';
 
@@ -15,8 +16,6 @@ class AppRouter{
     switch(settings.name) {
       case '/':
         return HomeScreen.route();
-      case HomeScreen.routeName:
-        return HomeScreen.route();
       case LocationScreen.routeName:
         return LocationScreen.route();
       case FilterScreen.routeName:
@@ -24,7 +23,9 @@ class AppRouter{
       case ShopScreen.routeName:
         return ShopScreen.route();
       case ShopDetailsScreen.routeName:
-        return ShopDetailsScreen.route();
+        return ShopDetailsScreen.route(
+          shop:settings.arguments as Shop
+        );
       case BasketScreen.routeName:
         return BasketScreen.route();
         break;

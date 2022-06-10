@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:food_app/screens/screens.dart';
 
 import '../../widgets/header_widget.dart';
 import '../home/home_screen.dart';
@@ -70,7 +71,7 @@ class _LoginPageState extends State<LoginPage>{
                                 ),
                                 onPressed: (){
                                   //redirect
-                                 Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
+                                 Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomeScreen())); //popravi
                                 },
                               ),
                               Container(

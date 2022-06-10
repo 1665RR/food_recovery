@@ -7,6 +7,7 @@ import '../../models/promo_model.dart';
 import '../../models/shop_model.dart';
 import '../../widgets/category_box.dart';
 import '../../widgets/promo_box.dart';
+import '../../widgets/shop_card.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -68,6 +69,7 @@ class HomeScreen extends StatelessWidget {
             ),
             ListView.builder(
               shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
               itemCount: Shop.shops.length,
               itemBuilder: (context, index) {
                 return ShopCard(shop: Shop.shops[index]);
@@ -80,72 +82,6 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-class ShopCard extends StatelessWidget {
-  final Shop shop;
-  const ShopCard({Key? key, required this.shop}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Stack(
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width,
-                height: 150,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5.0),
-                  image: DecorationImage(
-                    image: NetworkImage(shop.imageUrl),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-              Positioned(
-                top:10,
-                right: 10,
-                child: Container(
-                  width: 70,
-                  height: 30,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(
-                      5.0,
-                    ),
-                  ),
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      '${shop.deliveryTime}',
-                      style: Theme.of(context).textTheme.bodyText1,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(shop.name,
-                  style: Theme.of(context).textTheme.headline5,
-                ),
-                const SizedBox(height: 5),
-                Text(shop.address),
-                const SizedBox(height: 5),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
 
 class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
   const CustomAppBar({Key? key}) : super(key: key);
