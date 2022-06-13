@@ -7,6 +7,7 @@ import 'package:food_app/screens/shops_details/shop_details.dart';
 
 import '../models/shop_model.dart';
 import '../screens/filter/filter.dart';
+import '../screens/shop_listing/shop_listing_screen.dart';
 import '../screens/shops/shop.dart';
 
 class AppRouter{
@@ -28,7 +29,10 @@ class AppRouter{
         );
       case BasketScreen.routeName:
         return BasketScreen.route();
-        break;
+      case ShopListing.routeName:
+        return ShopListing.route(
+          shops: settings.arguments as List<Shop>
+        );
       default:
         return _errorRoute();
     }

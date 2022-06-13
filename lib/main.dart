@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:food_app/config/theme.dart';
+import 'package:food_app/screens/home/home_screen.dart';
 import 'package:food_app/screens/splash/splash.dart';
 
 import 'config/app_router.dart';
