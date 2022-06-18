@@ -1,19 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../blocs/basket/basket_bloc.dart';
 import '../../models/shop_model.dart';
 import '../../widgets/shop_information.dart';
 
 class ShopDetailsScreen extends StatelessWidget {
-  const ShopDetailsScreen({Key? key, required this.shop,}) : super(key: key);
+  const ShopDetailsScreen({
+    Key? key,
+    required this.shop,
+  }) : super(key: key);
 
   static const String routeName = '/shop-details';
 
   static Route route({required Shop shop}) {
     return MaterialPageRoute(
-      builder: (_) =>  ShopDetailsScreen(shop:shop),
+      builder: (_) => ShopDetailsScreen(shop: shop),
       settings: const RouteSettings(name: routeName),
     );
   }
+
   final Shop shop;
 
   @override
@@ -36,7 +42,9 @@ class ShopDetailsScreen extends StatelessWidget {
                     horizontal: 50,
                   ),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushNamed(context, '/basket');
+                },
                 child: const Text('Basket'),
               )
             ],
@@ -63,7 +71,7 @@ class ShopDetailsScreen extends StatelessWidget {
             ),
             ShopInformation(shop: shop),
             ListView.builder(
-              padding:  EdgeInsets.zero,
+              padding: EdgeInsets.zero,
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               itemCount: shop.tags.length,
@@ -93,43 +101,50 @@ class ShopDetailsScreen extends StatelessWidget {
         Column(
           children: shop.menuItems
               .where((menuItem) => menuItem.category == shop.tags[index])
-              .map((menuItem) => Column(
-                    children: [
-                      Container(
-                        color: Colors.white,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20,
-                        ),
-                        child: ListTile(
-                          dense:true,
-                          contentPadding: EdgeInsets.zero,
-                          title: Text(menuItem.name,
-                              style:Theme.of(context).textTheme.headline5
-                          ),
-                          subtitle: Text(menuItem.description,
-                              style:Theme.of(context).textTheme.bodyText1
-                          ),
-                          trailing: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              IconButton(
-                                icon: Icon(
-                                  Icons.add_circle,
-                                  color: Theme.of(context).colorScheme.secondary,
-                                ),
-                                onPressed: () {},
-                              ),
-                            ],
-                          ),
+              .map(
+                (menuItem) => Column(
+                  children: [
+                    Container(
+                      color: Colors.white,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                      ),
+                      child: ListTile(
+                        dense: true,
+                        contentPadding: EdgeInsets.zero,
+                        title: Text(menuItem.name,
+                            style: Theme.of(context).textTheme.headline5),
+                        subtitle: Text(menuItem.description,
+                            style: Theme.of(context).textTheme.bodyText1),
+                        trailing: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            BlocBuilder<BasketBloc, BasketState>(
+                              builder: (context, state) {
+                                return IconButton(
+                                  icon: Icon(
+                                    Icons.add_circle,
+                                    color:
+                                        Theme.of(context).colorScheme.secondary,
+                                  ),
+                                  onPressed: () {
+                                    context.read<BasketBloc>()..add(AddItem(menuItem));
+                                  },
+                                );
+                              },
+                            ),
+                          ],
                         ),
                       ),
-                      const Divider(
-                        height: 2,
-                      ),
-                    ],
-                  ),
-          ).toList(),
+                    ),
+                    const Divider(
+                      height: 2,
+                    ),
+                  ],
+                ),
+              )
+              .toList(),
         ),
       ],
     );
