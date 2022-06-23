@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:food_app/blocs/basket/basket_bloc.dart';
 import 'package:food_app/config/theme.dart';
+import 'package:food_app/models/user_model.dart';
 import 'package:food_app/screens/home/home_screen.dart';
 import 'package:food_app/screens/splash/splash.dart';
 
 import 'blocs/bloc.dart';
 import 'config/app_router.dart';
 
-void main() async{
- // Bloc.observer = SimpleBlocObserver();
+void main() async {
+  // Bloc.observer = SimpleBlocObserver();
   runApp(const MyApp());
 }
 
@@ -26,13 +27,14 @@ class MyApp extends StatelessWidget {
             ..add(
               StartBasket(),
             ),
-        )
-      ], child:  MaterialApp(
+        ),
+      ],
+      child: MaterialApp(
         title: 'Food Rescue',
         theme: theme(),
         onGenerateRoute: AppRouter.onGenerateRoute,
         //initialRoute: HomeScreen.routeName,
-        home: const SplashScreen(
+        home: SplashScreen(
           title: 'Login UI',
         ),
       ),

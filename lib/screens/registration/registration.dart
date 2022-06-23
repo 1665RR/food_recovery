@@ -4,8 +4,7 @@ import 'package:food_app/screens/home/home_screen.dart';
 
 import '../../widgets/header_widget.dart';
 
-
-class RegistrationPage extends  StatefulWidget{
+class RegistrationPage extends StatefulWidget {
   const RegistrationPage({Key? key}) : super(key: key);
 
   @override
@@ -14,8 +13,7 @@ class RegistrationPage extends  StatefulWidget{
   }
 }
 
-class _RegistrationPageState extends State<RegistrationPage>{
-
+class _RegistrationPageState extends State<RegistrationPage> {
   final _formKey = GlobalKey<FormState>();
   bool checkedValue = false;
   bool checkboxValue = false;
@@ -48,8 +46,8 @@ class _RegistrationPageState extends State<RegistrationPage>{
                                 padding: const EdgeInsets.all(10),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(100),
-                                  border: Border.all(
-                                      width: 5, color: Colors.white),
+                                  border:
+                                      Border.all(width: 5, color: Colors.white),
                                   color: Colors.white,
                                   boxShadow: const [
                                     BoxShadow(
@@ -66,7 +64,8 @@ class _RegistrationPageState extends State<RegistrationPage>{
                                 ),
                               ),
                               Container(
-                                padding: const EdgeInsets.fromLTRB(80, 80, 0, 0),
+                                padding:
+                                    const EdgeInsets.fromLTRB(80, 80, 0, 0),
                                 child: Icon(
                                   Icons.add_circle,
                                   color: Colors.grey.shade700,
@@ -76,20 +75,32 @@ class _RegistrationPageState extends State<RegistrationPage>{
                             ],
                           ),
                         ),
-                        const SizedBox(height: 30,),
-                        TextFormField(
-                          decoration: const InputDecoration(labelText: 'First Name', hintText: 'Enter your first name'),
+                        const SizedBox(
+                          height: 30,
                         ),
-                        const SizedBox(height: 30,),
                         TextFormField(
-                          decoration: const InputDecoration(labelText: 'Last Name', hintText: 'Enter your last name'),
+                          decoration: const InputDecoration(
+                              labelText: 'First Name',
+                              hintText: 'Enter your first name'),
+                        ),
+                        const SizedBox(
+                          height: 30,
+                        ),
+                        TextFormField(
+                          decoration: const InputDecoration(
+                              labelText: 'Last Name',
+                              hintText: 'Enter your last name'),
                         ),
                         const SizedBox(height: 20.0),
                         TextFormField(
-                          decoration: const InputDecoration(labelText: 'Email', hintText: 'Enter your email address'),
+                          decoration: const InputDecoration(
+                              labelText: 'Email',
+                              hintText: 'Enter your email address'),
                           keyboardType: TextInputType.emailAddress,
                           validator: (val) {
-                            if(!(val!.isEmpty) && !RegExp(r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$").hasMatch(val)){
+                            if (!(val!.isEmpty) &&
+                                !RegExp(r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$")
+                                    .hasMatch(val)) {
                               return "Enter a valid email address";
                             }
                             return null;
@@ -98,7 +109,9 @@ class _RegistrationPageState extends State<RegistrationPage>{
                         const SizedBox(height: 20.0),
                         TextFormField(
                           obscureText: true,
-                          decoration: const InputDecoration(labelText: 'Password*', hintText: 'Enter your password'),
+                          decoration: const InputDecoration(
+                              labelText: 'Password*',
+                              hintText: 'Enter your password'),
                           validator: (val) {
                             if (val!.isEmpty) {
                               return "Please enter your password";
@@ -111,7 +124,8 @@ class _RegistrationPageState extends State<RegistrationPage>{
                         Container(
                           child: ElevatedButton(
                             child: Padding(
-                              padding: const EdgeInsets.fromLTRB(40, 10, 40, 10),
+                              padding:
+                                  const EdgeInsets.fromLTRB(40, 10, 40, 10),
                               child: Text(
                                 "Register".toUpperCase(),
                                 style: const TextStyle(
@@ -125,10 +139,8 @@ class _RegistrationPageState extends State<RegistrationPage>{
                               if (_formKey.currentState!.validate()) {
                                 Navigator.of(context).pushAndRemoveUntil(
                                     MaterialPageRoute(
-                                        builder: (context) => const HomeScreen()
-                                    ),
-                                        (Route<dynamic> route) => false
-                                );
+                                        builder: (context) => HomeScreen()),
+                                    (Route<dynamic> route) => false);
                               }
                             },
                           ),
@@ -144,5 +156,4 @@ class _RegistrationPageState extends State<RegistrationPage>{
       ),
     );
   }
-
 }

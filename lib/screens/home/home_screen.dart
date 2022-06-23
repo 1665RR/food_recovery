@@ -1,8 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:food_app/models/category_model.dart';
+import 'package:food_app/models/user_model.dart';
+import 'package:food_app/screens/login/login.dart';
 import 'package:food_app/widgets/food_search.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../api/auth.dart';
 import '../../models/promo_model.dart';
 import '../../models/shop_model.dart';
 import '../../widgets/category_box.dart';
@@ -10,13 +14,14 @@ import '../../widgets/promo_box.dart';
 import '../../widgets/shop_card.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+   HomeScreen({Key? key}) : super(key: key);
 
   static const String routeName = '/';
 
+  final AuthAPI _authAPI = AuthAPI();
   static Route route() {
     return MaterialPageRoute(
-      builder: (_) => const HomeScreen(),
+      builder: (_) =>  HomeScreen(),
       settings: const RouteSettings(name: routeName),
     );
   }
@@ -101,14 +106,30 @@ class HomeScreen extends StatelessWidget {
                 Navigator.pop(context);
               },
             ),
-            ListTile(
-              title: const Text('Log out'),
-              onTap: () {
-                // Update the state of the app
-                // ...
-                // Then close the drawer
-                Navigator.pop(context);
-              },
+             ElevatedButton(
+               child: Text('Log Out'),
+               onPressed: () async {
+                  final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+                  var  sharedToken = sharedPreferences.getString('token');
+                  try{
+                    var req= await _authAPI.logout(sharedToken!);
+                    if(req.statusCode==204){
+                      sharedPreferences.remove('token');
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  LoginPage()
+                          ),
+                      );
+                    }
+                    else{
+                      print(req.statusCode);
+                    }
+                  }on Exception catch (e){
+                    print(e);
+                  }
+               },
             ),
           ],
         ),
