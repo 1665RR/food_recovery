@@ -3,17 +3,24 @@ import 'package:food_app/api/api.dart';
 import 'package:http/http.dart' as http;
 
 class AuthAPI extends BaseAPI {
-  Future<http.Response> signUp(String name, String email, String phone,
-      String address, String password, String passwordConfirmation) async {
+  Future<http.Response> signUp(
+      String name,
+      String email,
+      String phone,
+      String address,
+      String password,
+      String passwordConfirmation,
+      String photo,
+      String description) async {
     var body = jsonEncode({
-      'user': {
-        'name': name,
-        'email': email,
-        'phone': phone,
-        'address': address,
-        'password': password,
-        'password_confirmation': passwordConfirmation
-      }
+      'username': name,
+      'email': email,
+      'phone': phone,
+      'address': address,
+      'password': password,
+      'confPass': passwordConfirmation,
+      'photo': photo,
+      'description': description,
     });
     http.Response response = await http.post(Uri.parse(super.signupPath),
         headers: super.headers, body: body);
@@ -30,7 +37,6 @@ class AuthAPI extends BaseAPI {
   }
 
   Future<http.Response> logout(String token) async {
-    var body = jsonEncode({'accessToken': token});
 
     http.Response response =
         await http.get(Uri.parse(super.logoutPath), headers: {

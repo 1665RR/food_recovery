@@ -1,8 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:food_app/screens/home/home_screen.dart';
+import 'package:food_app/api/auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../widgets/header_widget.dart';
+import '../login/login.dart';
 
 class RegistrationPage extends StatefulWidget {
   const RegistrationPage({Key? key}) : super(key: key);
@@ -14,9 +15,17 @@ class RegistrationPage extends StatefulWidget {
 }
 
 class _RegistrationPageState extends State<RegistrationPage> {
-  final _formKey = GlobalKey<FormState>();
-  bool checkedValue = false;
-  bool checkboxValue = false;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final AuthAPI _authAPI = AuthAPI();
+
+  late String name;
+  late String email;
+  late String phone;
+  late String address;
+  late String password;
+  late String passwordConfirmation;
+  late String description = '';
+  late String photo = '';
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +39,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
               child: HeaderWidget(150, false, Icons.person_add_alt_1_rounded),
             ),
             Container(
-              margin: const EdgeInsets.fromLTRB(25, 50, 25, 10),
+              margin: const EdgeInsets.fromLTRB(25, 35, 25, 10),
               padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
               alignment: Alignment.center,
               child: Column(
@@ -76,22 +85,15 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           ),
                         ),
                         const SizedBox(
-                          height: 30,
+                          height: 15,
                         ),
                         TextFormField(
                           decoration: const InputDecoration(
-                              labelText: 'First Name',
-                              hintText: 'Enter your first name'),
+                              labelText: 'Username',
+                              hintText: 'Enter your username'),
+                          onChanged: (val) => setState(() => name = val),
                         ),
-                        const SizedBox(
-                          height: 30,
-                        ),
-                        TextFormField(
-                          decoration: const InputDecoration(
-                              labelText: 'Last Name',
-                              hintText: 'Enter your last name'),
-                        ),
-                        const SizedBox(height: 20.0),
+                        const SizedBox(height: 15.0),
                         TextFormField(
                           decoration: const InputDecoration(
                               labelText: 'Email',
@@ -103,10 +105,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                     .hasMatch(val)) {
                               return "Enter a valid email address";
                             }
-                            return null;
                           },
+                          onChanged: (val) => setState(() => email = val),
                         ),
-                        const SizedBox(height: 20.0),
+                        const SizedBox(height: 15.0),
                         TextFormField(
                           obscureText: true,
                           decoration: const InputDecoration(
@@ -118,32 +120,83 @@ class _RegistrationPageState extends State<RegistrationPage> {
                             }
                             return null;
                           },
+                          onChanged: (val) => setState(() => password = val),
                         ),
                         const SizedBox(height: 15.0),
-                        const SizedBox(height: 20.0),
-                        Container(
-                          child: ElevatedButton(
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.fromLTRB(40, 10, 40, 10),
-                              child: Text(
-                                "Register".toUpperCase(),
-                                style: const TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                ),
+                        TextFormField(
+                          obscureText: true,
+                          decoration: const InputDecoration(
+                              labelText: 'Password confirmation*',
+                              hintText: 'Confirm your password'),
+                          validator: (val) {
+                            if (val!.isEmpty) {
+                              return "Please enter your password";
+                            }
+                            return null;
+                          },
+                          onChanged: (val) =>
+                              setState(() => passwordConfirmation = val),
+                        ),
+                        const SizedBox(height: 15.0),
+                        TextFormField(
+                          decoration: const InputDecoration(
+                              labelText: 'Phone', hintText: 'Enter your phone'),
+                          keyboardType: TextInputType.phone,
+                          onChanged: (val) => setState(() => phone = val),
+                        ),
+                        const SizedBox(height: 15.0),
+                        TextFormField(
+                          decoration: const InputDecoration(
+                              labelText: 'Address',
+                              hintText: 'Enter your address'),
+                          keyboardType: TextInputType.streetAddress,
+                          onChanged: (val) => setState(() => address = val),
+                        ),
+                        const SizedBox(height: 15.0),
+                        ElevatedButton(
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.fromLTRB(40, 10, 40, 10),
+                            child: Text(
+                              "Register".toUpperCase(),
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
                               ),
                             ),
-                            onPressed: () {
-                              if (_formKey.currentState!.validate()) {
-                                Navigator.of(context).pushAndRemoveUntil(
-                                    MaterialPageRoute(
-                                        builder: (context) => HomeScreen()),
-                                    (Route<dynamic> route) => false);
-                              }
-                            },
                           ),
+                          onPressed: () async {
+                            if (_formKey.currentState!.validate()) {
+                              try {
+                                var req = await _authAPI.signUp(
+                                    name,
+                                    email,
+                                    phone,
+                                    address,
+                                    password,
+                                    passwordConfirmation,
+                                    description,
+                                    photo);
+                                if (req.statusCode == 200) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          content: Text(
+                                              'Successful registration!')));
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const LoginPage()));
+                                } else {
+                                  print(req.body);
+                                }
+                              } on Exception catch (e) {
+                                print(e.toString());
+                                print('catched error');
+                              }
+                            }
+                          },
                         ),
                       ],
                     ),

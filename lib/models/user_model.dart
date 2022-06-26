@@ -7,9 +7,15 @@ class User {
   String? email;
   String? address;
   String? name;
-  String token;
+  String  token;
+  String  ? phone;
+  String ? photo;
+  String ? description;
 
-  User({this.id, this.email, this.address, this.name, required this.token});
+
+  User({this.id, this.email, this.address, this.name, required this.token,
+     this.phone,  this.photo, this.description
+  });
 
   factory User.fromReqBody(String body) {
     Map<String, dynamic> json = jsonDecode(body);
@@ -20,6 +26,9 @@ class User {
       name: json['username'],
       token: json['accessToken'],
       address: json['address'],
+      phone: json['phone'],
+      photo: json['photo'],
+      description: json['description'],
     );
   }
 

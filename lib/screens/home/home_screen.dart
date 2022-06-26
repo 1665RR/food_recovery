@@ -14,14 +14,14 @@ import '../../widgets/promo_box.dart';
 import '../../widgets/shop_card.dart';
 
 class HomeScreen extends StatelessWidget {
-   HomeScreen({Key? key}) : super(key: key);
+  HomeScreen({Key? key}) : super(key: key);
 
   static const String routeName = '/';
 
   final AuthAPI _authAPI = AuthAPI();
   static Route route() {
     return MaterialPageRoute(
-      builder: (_) =>  HomeScreen(),
+      builder: (_) => HomeScreen(),
       settings: const RouteSettings(name: routeName),
     );
   }
@@ -30,7 +30,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
-      appBar:  AppBar(title: const Text('Home page')),
+      appBar: AppBar(title: const Text('Home page')),
       body: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -61,7 +61,7 @@ class HomeScreen extends StatelessWidget {
                     }),
               ),
             ),
-            FoodSearchBox(),
+            const FoodSearchBox(),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Align(
@@ -106,30 +106,27 @@ class HomeScreen extends StatelessWidget {
                 Navigator.pop(context);
               },
             ),
-             ElevatedButton(
-               child: Text('Log Out'),
-               onPressed: () async {
-                  final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-                  var  sharedToken = sharedPreferences.getString('token');
-                  try{
-                    var req= await _authAPI.logout(sharedToken!);
-                    if(req.statusCode==204){
-                      sharedPreferences.remove('token');
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  LoginPage()
-                          ),
-                      );
-                    }
-                    else{
-                      print(req.statusCode);
-                    }
-                  }on Exception catch (e){
-                    print(e);
+            ElevatedButton(
+              child: Text('Log Out'),
+              onPressed: () async {
+                final SharedPreferences sharedPreferences =
+                    await SharedPreferences.getInstance();
+                var sharedToken = sharedPreferences.getString('token');
+                try {
+                  var req = await _authAPI.logout(sharedToken!);
+                  if (req.statusCode == 204) {
+                    sharedPreferences.remove('token');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoginPage()),
+                    );
+                  } else {
+                    print(req.statusCode);
                   }
-               },
+                } on Exception catch (e) {
+                  print(e);
+                }
+              },
             ),
           ],
         ),
@@ -137,6 +134,3 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
-
-
-
