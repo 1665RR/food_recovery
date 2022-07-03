@@ -20,16 +20,16 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (context) => BasketBloc()
-            ..add(
-              StartBasket(),
-            ),
-        ),
-      ],
-      child: MaterialApp(
+    //return MultiBlocProvider(
+    //   providers: [
+    //     // BlocProvider(
+    //     //   create: (context) => BasketBloc()
+    //     //     ..add(
+    //     //       StartBasket(),
+    //     //     ),
+    //     // ),
+    //   ],
+      return MaterialApp(
         title: 'Food Rescue',
         theme: theme(),
         onGenerateRoute: AppRouter.onGenerateRoute,
@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
         home: SplashScreen(
           title: 'Login UI',
         ),
-      ),
-    );
+      );
+   // );
   }
 }

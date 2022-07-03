@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:food_app/blocs/basket/basket_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class BasketScreen extends StatelessWidget {
+import '../../api/api_services.dart';
+import '../../models/basket_model.dart';
+
+class BasketScreen extends StatefulWidget {
   const BasketScreen({Key? key}) : super(key: key);
 
   static const String routeName = '/basket';
@@ -12,6 +16,29 @@ class BasketScreen extends StatelessWidget {
       builder: (_) => const BasketScreen(),
       settings: const RouteSettings(name: routeName),
     );
+  }
+
+  @override
+  State<BasketScreen> createState() => _BasketScreenState();
+}
+
+class _BasketScreenState extends State<BasketScreen> {
+
+  late List<Basket>? _basket = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _getBasket();
+  }
+
+  void _getBasket() async {
+    final SharedPreferences sharedPreferences =
+    await SharedPreferences.getInstance();
+    var sharedToken = sharedPreferences.getString('token');
+    _basket = (await ApiService().fetchOrders(sharedToken!));
+    Future.delayed(const Duration(seconds: 1)).then((value) => setState(() {}));
+print(_basket);
   }
 
   @override
@@ -35,15 +62,10 @@ class BasketScreen extends StatelessWidget {
                   .headline4!
                   .copyWith(color: Theme.of(context).colorScheme.secondary),
             ),
-            BlocBuilder<BasketBloc, BasketState>(
-              builder: (context, state) {
-                if (state is BasketLoading) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-                if (state is BasketLoaded) {
-                  return state.basket.items.isEmpty
+            Builder(
+                  builder:(BuildContext context)
+                {
+                  return _basket!.isEmpty
                       ? Container(
                           width: double.infinity,
                           margin: const EdgeInsets.only(top: 5),
@@ -67,10 +89,7 @@ class BasketScreen extends StatelessWidget {
                         )
                       : ListView.builder(
                           shrinkWrap: true,
-                          itemCount: state.basket
-                              .itemQuantity(state.basket.items)
-                              .keys
-                              .length,
+                          itemCount: _basket!.length,
                           itemBuilder: (context, index) {
                             return Container(
                               width: double.infinity,
@@ -84,7 +103,7 @@ class BasketScreen extends StatelessWidget {
                               child: Row(
                                 children: [
                                   Text(
-                                    '${state.basket.itemQuantity(state.basket.items).entries.elementAt(index).value}x',
+                                    '${_basket![index].productQuantity}x',
                                     style: Theme.of(context)
                                         .textTheme
                                         .headline6
@@ -99,7 +118,7 @@ class BasketScreen extends StatelessWidget {
                                   ),
                                   Expanded(
                                     child: Text(
-                                      '${state.basket.itemQuantity(state.basket.items).keys.elementAt(index).name}',
+                                      '${_basket![index].menuItem!.name}',
                                       style:
                                           Theme.of(context).textTheme.headline6,
                                     ),
@@ -108,9 +127,6 @@ class BasketScreen extends StatelessWidget {
                               ),
                             );
                           });
-                } else {
-                  return const Text('Something went wrong.');
-                }
               },
             ),
           ],

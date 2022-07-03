@@ -1,29 +1,63 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:food_app/models/category_model.dart';
-import 'package:food_app/models/user_model.dart';
 import 'package:food_app/screens/login/login.dart';
 import 'package:food_app/widgets/food_search.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../api/auth.dart';
+import '../../api/api_services.dart';
 import '../../models/promo_model.dart';
-import '../../models/shop_model.dart';
+import '../../models/user_model.dart';
 import '../../widgets/category_box.dart';
 import '../../widgets/promo_box.dart';
 import '../../widgets/shop_card.dart';
 
-class HomeScreen extends StatelessWidget {
-  HomeScreen({Key? key}) : super(key: key);
-
+class HomeScreen extends StatefulWidget {
   static const String routeName = '/';
 
-  final AuthAPI _authAPI = AuthAPI();
+
   static Route route() {
     return MaterialPageRoute(
       builder: (_) => HomeScreen(),
       settings: const RouteSettings(name: routeName),
     );
+  }
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+
+  final AuthAPI _authAPI = AuthAPI();
+
+
+  late List<Category>? _categories = [];
+  late List<User>? _providers = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _getCategories();
+    _getProviders();
+  }
+
+  void _getCategories() async {
+    final SharedPreferences sharedPreferences =
+    await SharedPreferences.getInstance();
+    var sharedToken = sharedPreferences.getString('token');
+    _categories = (await ApiService().fetchCategories(sharedToken!));
+    Future.delayed(const Duration(seconds: 1)).then((value) => setState(() {}));
+
+  }
+
+  void _getProviders() async {
+    final SharedPreferences sharedPreferences =
+    await SharedPreferences.getInstance();
+    var sharedToken = sharedPreferences.getString('token');
+    _providers = (await ApiService().fetchProviders(sharedToken!));
+    Future.delayed(const Duration(seconds: 1)).then((value) => setState(() {}));
+
   }
 
   @override
@@ -42,9 +76,9 @@ class HomeScreen extends StatelessWidget {
                 child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     shrinkWrap: true,
-                    itemCount: Category.categories.length,
+                    itemCount: _categories!.length,
                     itemBuilder: (context, index) {
-                      return CategoryBox(category: Category.categories[index]);
+                      return CategoryBox(category: _categories![index]);
                     }),
               ),
             ),
@@ -75,9 +109,9 @@ class HomeScreen extends StatelessWidget {
             ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: Shop.shops.length,
+              itemCount: _providers!.length,
               itemBuilder: (context, index) {
-                return ShopCard(shop: Shop.shops[index]);
+                return ShopCard(shop: _providers![index]);
               },
             ),
           ],

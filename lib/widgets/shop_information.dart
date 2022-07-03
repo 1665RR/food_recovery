@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:food_app/widgets/shop_tags.dart';
 
 import '../models/shop_model.dart';
+import '../models/user_model.dart';
 
 class ShopInformation extends StatelessWidget {
-  final Shop shop;
+  final User shop;
   const ShopInformation({
     Key? key,
     required this.shop,
@@ -30,7 +31,7 @@ class ShopInformation extends StatelessWidget {
           const SizedBox(
             height: 10,
           ),
-          ShopTags(shop: shop),
+          //ShopTags(shop: shop),
           const SizedBox(
             height: 10,
           ),

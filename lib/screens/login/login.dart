@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:food_app/screens/screens.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -99,7 +98,7 @@ class _LoginPageState extends State<LoginPage> {
                                       if (req.statusCode == 200) {
                                         var user = User.fromReqBody(req.body);
                                         sharedPreferences.setString(
-                                            'token', user.token);
+                                            'token', user.token!);
                                         user.printAttributes();
                                         Navigator.push(
                                             context,

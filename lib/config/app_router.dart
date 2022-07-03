@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:food_app/models/user_model.dart';
 import 'package:food_app/screens/basket/basket.dart';
 import 'package:food_app/screens/home/home_screen.dart';
 import 'package:food_app/screens/location//location_screen.dart';
@@ -25,13 +26,14 @@ class AppRouter{
         return ShopScreen.route();
       case ShopDetailsScreen.routeName:
         return ShopDetailsScreen.route(
-          shop:settings.arguments as Shop
+          shop:settings.arguments as User,
+
         );
       case BasketScreen.routeName:
         return BasketScreen.route();
       case ShopListing.routeName:
         return ShopListing.route(
-          shops: settings.arguments as List<Shop>
+          shops: settings.arguments as List<User>
         );
       default:
         return _errorRoute();

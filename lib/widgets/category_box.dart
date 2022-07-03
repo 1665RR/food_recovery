@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:food_app/api/api_services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../models/category_model.dart';
 import '../models/shop_model.dart';
+import '../models/user_model.dart';
 
-class CategoryBox extends StatelessWidget {
+class CategoryBox extends StatefulWidget {
   final Category category;
   const CategoryBox({
     Key? key,
@@ -10,15 +13,37 @@ class CategoryBox extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<CategoryBox> createState() => _CategoryBoxState();
+}
+
+class _CategoryBoxState extends State<CategoryBox> {
+  late List<User>? _shops = [];
+
+  @override
+  void initState(){
+    super.initState();
+  }
+
+  Future _searchCategories() async{
+    final SharedPreferences sharedPreferences =
+    await SharedPreferences.getInstance();
+    var sharedToken = sharedPreferences.getString('token');
+    _shops = (await ApiService().searchCategories(sharedToken!, widget.category.id));
+ // Future.delayed(const Duration(seconds: 1)).then((value) => setState(() {}));
+    print(_shops);
+    print(widget.category.image);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final List<Shop> shops = Shop.shops
-    .where((shop) => shop.tags.contains(category.name),)
-    .toList();
+
     return InkWell(
-      onTap: (){
+      onTap: () async{
+         await _searchCategories();
+
         Navigator.pushNamed(
             context, '/shop-listing',
-            arguments: shops);
+            arguments: _shops!);
       },
       child:Container(
       width: 88,
@@ -34,11 +59,14 @@ class CategoryBox extends StatelessWidget {
             left: 15,
             child: Container(
               height: 60,
-              width: 55,
+              width: 60,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5.0),
-              ),
-              child: category.image,
+                image: DecorationImage(
+                  fit: BoxFit.cover,
+                  image: NetworkImage("http://10.0.2.2:8080/${widget.category.image.replaceAll(r'\', r'/')}"),
+                ),
+            ),
             ),
           ),
           Padding(
@@ -46,7 +74,7 @@ class CategoryBox extends StatelessWidget {
             child: Align(
               alignment: Alignment.bottomCenter,
               child: Text(
-                category.name,
+                widget.category.name,
                 style: Theme.of(context).textTheme.headline5!.copyWith(
                   color: Colors.white,
                 ),
