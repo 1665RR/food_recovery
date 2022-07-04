@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:food_app/screens/admin/admin_screen.dart';
+import 'package:food_app/screens/provider/provider_screen.dart';
 import 'package:food_app/screens/screens.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -99,12 +101,29 @@ class _LoginPageState extends State<LoginPage> {
                                         var user = User.fromReqBody(req.body);
                                         sharedPreferences.setString(
                                             'token', user.token!);
-                                        user.printAttributes();
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    HomeScreen()));
+                                        sharedPreferences.setString(
+                                            'type', user.roles![0]);
+                                        var sharedType =
+                                            sharedPreferences.getString('type');
+                                        if (sharedType == "user") {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      HomeScreen()));
+                                        } else if (sharedType == "provider") {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ProviderScreen()));
+                                        } else if (sharedType == "admin") {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      AdminScreen()));
+                                        }
                                       } else {
                                         print(req.body);
                                       }
@@ -112,20 +131,12 @@ class _LoginPageState extends State<LoginPage> {
                                       print(e.toString());
                                       print('catched error');
                                     }
-                                    //redirect
-                                    // Navigator.pushReplacement(
-                                    //     context,
-                                    //     MaterialPageRoute(
-                                    //         builder: (context) =>
-                                    //             const HomeScreen())
-                                    // ); //popravi
                                   }
                                 },
                               ),
                               Container(
                                 margin:
                                     const EdgeInsets.fromLTRB(10, 20, 10, 20),
-                                //child: Text('Don\'t have an account? Create'),
                                 child: Text.rich(TextSpan(children: [
                                   const TextSpan(
                                       text: "Don't have an account? "),

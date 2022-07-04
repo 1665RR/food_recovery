@@ -3,13 +3,16 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:food_app/screens/login/login.dart';
+import 'package:food_app/screens/provider/provider_screen.dart';
 import 'package:food_app/screens/screens.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../api/auth.dart';
 import '../../models/user_model.dart';
+import '../admin/admin_screen.dart';
 
 String? finalToken;
+String? finalType;
 
 class SplashScreen extends StatefulWidget {
   SplashScreen({Key? key, required this.title}) : super(key: key);
@@ -29,9 +32,23 @@ class _SplashScreenState extends State<SplashScreen> {
               ? Navigator.of(context).pushAndRemoveUntil(
                   MaterialPageRoute(builder: (context) => const LoginPage()),
                   (route) => false)
-              : Navigator.of(context).pushAndRemoveUntil(
+              : {
+            if(finalType=="user"){
+              Navigator.of(context).pushAndRemoveUntil(
                   MaterialPageRoute(builder: (context) => HomeScreen()),
-                  (route) => false);
+                      (route) => false)
+            }
+            else if(finalType=="provider"){
+              Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (context) => ProviderScreen()),
+                      (route) => false)
+            }
+            else if(finalType=="admin"){
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (context) => AdminScreen()),
+                        (route) => false)
+              }
+          };
         });
       });
     });
@@ -47,8 +64,10 @@ class _SplashScreenState extends State<SplashScreen> {
     final SharedPreferences sharedPreferences =
         await SharedPreferences.getInstance();
     var obtainedToken = sharedPreferences.getString('token');
+    var obtainedType = sharedPreferences.getString('type');
     setState(() {
       finalToken = obtainedToken;
+      finalType = obtainedType;
     });
     print(finalToken);
   }

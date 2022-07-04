@@ -83,8 +83,9 @@ class _ShopDetailsScreenState extends State<ShopDetailsScreen> {
               padding: EdgeInsets.zero,
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: widget.shop.menuItem?.length ?? 0,
+              itemCount: 1,
               itemBuilder: (context, index) {
+                print(widget.shop.menuItem?.length);
                 return _buildMenuItems(widget.shop, context, index);
               },
            ),

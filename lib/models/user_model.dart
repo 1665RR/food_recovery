@@ -21,10 +21,12 @@ class User {
   String ? photo;
   String ? description;
   List <MenuItem> ? menuItem;
+  List <String> ? roles;
 
 
   User({this.id, this.email, this.address,  required this.name,  this.token,
-     this.phone,  this.photo, this.description, this.menuItem
+     this.phone,  this.photo, this.description, this.menuItem,
+     this.roles
   });
 
   factory User.fromReqBody(String body) {
@@ -39,6 +41,7 @@ class User {
       phone: json['phone'],
       photo: json['photo'],
       description: json['description'],
+      roles: List<String>.from(json['roles'].map((x) => x)),
     );
   }
 
@@ -58,6 +61,7 @@ class User {
     address: json['Address'],
     phone: json['Phone'],
     photo: json['Photo'],
+    description: json['Description'],
     menuItem: List<MenuItem>.from(json["Products"].map((x) => MenuItem.fromJson(x))),
   );
 

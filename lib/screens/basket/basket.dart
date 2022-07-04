@@ -52,84 +52,87 @@ print(_basket);
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Items',
-              style: Theme.of(context)
-                  .textTheme
-                  .headline4!
-                  .copyWith(color: Theme.of(context).colorScheme.secondary),
-            ),
-            Builder(
-                  builder:(BuildContext context)
-                {
-                  return _basket!.isEmpty
-                      ? Container(
-                          width: double.infinity,
-                          margin: const EdgeInsets.only(top: 5),
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 30,
-                            vertical: 10,
-                          ),
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(5)),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'No Items in the Basket',
-                                textAlign: TextAlign.left,
-                                style: Theme.of(context).textTheme.headline6,
-                              ),
-                            ],
-                          ),
-                        )
-                      : ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: _basket!.length,
-                          itemBuilder: (context, index) {
-                            return Container(
-                              width: double.infinity,
-                              margin: const EdgeInsets.only(top: 5),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 30, vertical: 10),
-                              decoration: BoxDecoration(
-                                color: Colors.grey[100],
-                                borderRadius: BorderRadius.circular(5.0),
-                              ),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    '${_basket![index].productQuantity}x',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headline6
-                                        ?.copyWith(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .secondary),
-                                  ),
-                                  const SizedBox(
-                                    width: 20,
-                                    height: 50,
-                                  ),
-                                  Expanded(
-                                    child: Text(
-                                      '${_basket![index].menuItem!.name}',
-                                      style:
-                                          Theme.of(context).textTheme.headline6,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Items',
+                style: Theme.of(context)
+                    .textTheme
+                    .headline4!
+                    .copyWith(color: Theme.of(context).colorScheme.secondary),
+              ),
+              Builder(
+                    builder:(BuildContext context)
+                  {
+                    return _basket!.isEmpty
+                        ? Container(
+                            width: double.infinity,
+                            margin: const EdgeInsets.only(top: 5),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 30,
+                              vertical: 10,
+                            ),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(5)),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'No Items in the Basket',
+                                  textAlign: TextAlign.left,
+                                  style: Theme.of(context).textTheme.headline6,
+                                ),
+                              ],
+                            ),
+                          )
+                        : ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: _basket!.length,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemBuilder: (context, index) {
+                              return Container(
+                                width: double.infinity,
+                                margin: const EdgeInsets.only(top: 5),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 30, vertical: 10),
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[100],
+                                  borderRadius: BorderRadius.circular(5.0),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      '${_basket![index].productQuantity}x',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headline6
+                                          ?.copyWith(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          });
-              },
-            ),
-          ],
+                                    const SizedBox(
+                                      width: 20,
+                                      height: 50,
+                                    ),
+                                    Expanded(
+                                      child: Text(
+                                        '${_basket![index].menuItem!.name}',
+                                        style:
+                                            Theme.of(context).textTheme.headline6,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            });
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
