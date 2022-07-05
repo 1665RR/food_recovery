@@ -1,87 +1,122 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
+import 'package:food_app/models/menu_item_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:food_app/api/api.dart';
+import 'package:http_parser/http_parser.dart';
+import 'package:path/path.dart';
 
 import '../models/basket_model.dart';
 import '../models/category_model.dart';
 import '../models/user_model.dart';
+import 'package:async/async.dart';
 
-class ApiService extends BaseAPI{
-
+class ApiService extends BaseAPI {
   Future<List<Category>> fetchCategories(String token) async {
-    final response = await http.get(Uri.parse(super.categoriesPath),
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': 'Bearer $token',
-        });
+    final response = await http.get(Uri.parse(super.categoriesPath), headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+    });
 
-    if(response.statusCode==200){
+    if (response.statusCode == 200) {
       print(response.body);
-      List<Category> _model =categoryModelFromJson(response.body);
+      List<Category> _model = categoryModelFromJson(response.body);
       return _model;
-    }
-    else{
+    } else {
       throw Exception('Failed to load categories!');
     }
   }
 
   Future<List<User>> searchCategories(String token, int id) async {
-    final response = await http.get(Uri.parse(super.searchCategoriesPath + "/$id"),
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': 'Bearer $token',
-        });
-    if(response.statusCode==200){
+    final response = await http
+        .get(Uri.parse(super.searchCategoriesPath + "/$id"), headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+    });
+    if (response.statusCode == 200) {
       print(response.body);
-      List<User> _model =shopModelFromJson(response.body);
+      List<User> _model = shopModelFromJson(response.body);
       return _model;
-    }
-    else{
+    } else {
       print(response.body);
       throw Exception('Failed to load search!');
     }
   }
 
   Future<List<User>> fetchProviders(String token) async {
-    final response = await http.get(Uri.parse(super.providersPath),
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': 'Bearer $token',
-        });
+    final response = await http.get(Uri.parse(super.providersPath), headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+    });
 
-    if(response.statusCode==200){
+    if (response.statusCode == 200) {
       print(response.body);
-      List<User> _model =shopModelFromJson(response.body);
+      List<User> _model = shopModelFromJson(response.body);
       return _model;
-    }
-    else{
+    } else {
       throw Exception('Failed to load providers!');
     }
   }
 
   Future<User> fetchDetails(String token, int id) async {
-    final response = await http.get(Uri.parse(super.detailsPath + "/$id"),
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': 'Bearer $token',
-        });
-    if(response.statusCode==200){
+    final response =
+        await http.get(Uri.parse(super.detailsPath + "/$id"), headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+    });
+    if (response.statusCode == 200) {
       print(response.body);
-      User _model =detailsModelFromJson(response.body);
+      User _model = detailsModelFromJson(response.body);
       return _model;
-    }
-    else{
+    } else {
       print(response.body);
       throw Exception('Failed to load details!');
     }
   }
-  Future <List<Basket>> fetchOrders(String token) async {
-    final response = await http.get(Uri.parse(super.getOrdersPath),
+
+  Future<List<Basket>> fetchOrders(String token) async {
+    final response = await http.get(Uri.parse(super.getOrdersPath), headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+    });
+    if (response.statusCode == 200) {
+      print(response.body);
+      List<Basket> _model = basketFromJson(response.body);
+      return _model;
+    } else {
+      print(response.body);
+      throw Exception('Failed to load details!');
+    }
+  }
+
+  Future<http.Response> postOrders(String token, int id, int quantity) async {
+    // var jsonString =
+    //     {"product":{"id": $id, "quantity": $quantity}};
+    var body = jsonEncode({
+      "product": {"id": id, "quantity": quantity}
+    }).replaceAll(r'\', r'');
+    print(body);
+    http.Response response = await http.post(
+      Uri.parse(super.postOrdersPath),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: body,
+    );
+    print(jsonDecode(response.body));
+    return response;
+  }
+
+  Future <List<MenuItem>> fetchMyProducts(String token) async {
+    final response = await http.get(Uri.parse(super.getMyProductsPath),
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
@@ -89,7 +124,7 @@ class ApiService extends BaseAPI{
         });
     if(response.statusCode==200){
       print(response.body);
-      List<Basket> _model =basketFromJson(response.body);
+      List<MenuItem> _model =menuItemModelFromJson(response.body);
       return _model;
     }
     else{
@@ -98,22 +133,73 @@ class ApiService extends BaseAPI{
     }
   }
 
-  Future<http.Response> postOrders(String token, int id, int quantity ) async {
-    // var jsonString =
-    //     {"product":{"id": $id, "quantity": $quantity}};
-   var body =  jsonEncode({"product":{"id": id, "quantity": quantity}}).replaceAll(r'\', r'');
-    print(body);
-    http.Response response = await http.post(Uri.parse(super.postOrdersPath),
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': 'Bearer $token',
-        },
-      body:
-      body,
+  addProducts(String token, String name, String description, var expire,int itemsLeft,  int categoryId, File productImage) async {
+
+    var postUri = Uri.parse(super.productsPath);
+    Map<String, String> headers = { 'Authorization': 'Bearer $token'};
+    var request = http.MultipartRequest("POST", postUri);
+    request.headers.addAll(headers);
+    request.fields["name"] = name;
+    request.fields["description"] = description;
+    request.fields["expire"] = expire;
+    request.fields["itemsLeft"] = itemsLeft.toString();
+    request.fields["categoryId"] = categoryId.toString();
+    var multipartFile =  await http.MultipartFile.fromPath(
+        'productImage', productImage.path,
+        contentType: MediaType('image', 'jpeg'),
     );
-print(jsonDecode(response.body));
-      return response;
+    request.files.add(multipartFile);
+    http.Response response = await http.Response.fromStream(await request.send());
+
+    print("Result: ${jsonDecode(response.body)}");
+    return response;
+
+  }
+
+  Future<http.Response> deleteProducts(String token, int id,) async {
+    final response =
+    await http.delete(Uri.parse(super.productsPath + "/$id"), headers: {
+      'Authorization': 'Bearer $token',
+    });
+
+    if (response.statusCode == 200) {
+      print(response.body);
+      return(response);
+    } else {
+      print(response.body);
+      throw Exception('Failed to delete product!');
+    }
+  }
+
+  Future<List<Basket>> fetchOrdersByProducts(String token, int id) async {
+    final response = await http.get(Uri.parse(super.productOrdersPath + "/$id"), headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+    });
+    if (response.statusCode == 200) {
+      print(response.body);
+      List<Basket> _model = basketFromJson(response.body);
+      return _model;
+    } else {
+      print(response.body);
+      throw Exception('Failed to load orders by product!');
+    }
+  }
+
+  Future<http.Response> changeStatus(String token, int id,) async {
+    final response =
+    await http.put(Uri.parse(super.changeStatusPath + "/$id"), headers: {
+      'Authorization': 'Bearer $token',
+    });
+
+    if (response.statusCode == 200) {
+      print(response.body);
+      return(response);
+    } else {
+      print(response.body);
+      throw Exception('Failed to change status!');
+    }
   }
 
 }

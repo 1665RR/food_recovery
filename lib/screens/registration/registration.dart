@@ -182,7 +182,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
                                           content: Text(
-                                              'Successful registration!')));
+                                              'Successful registration!')
+                                      )
+                                  );
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(

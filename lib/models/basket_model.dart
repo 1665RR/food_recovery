@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
 import 'package:food_app/models/menu_item_model.dart' as itemMenu;
+import 'package:food_app/models/user_model.dart';
 
 List<Basket> basketFromJson(String str) => List<Basket>.from(json.decode(str).map((x) => Basket.fromJson(x)));
 
@@ -17,6 +18,7 @@ class Basket extends Equatable{
      required this.productId,
      required this.userId,
      required this.menuItem,
+     required this.user,
 
    });
 
@@ -27,6 +29,7 @@ class Basket extends Equatable{
    final String address;
    final int userId;
    final  itemMenu.MenuItem ? menuItem;
+   final User ? user;
 
    factory Basket.fromJson(Map<String, dynamic> json) => Basket(
      id: json["Id"] == null ? null : json["Id"],
@@ -36,6 +39,7 @@ class Basket extends Equatable{
      productId: json["ProductId"] == null ? null : json["ProductId"],
      userId: json["UserId"] == null ? null : json["UserId"],
      menuItem: json["Product"] == null ? null : itemMenu.MenuItem.fromJson(json["Product"]),
+     user: User.fromJson(json["User"]) ,
    );
 
   Map<String, dynamic> toJson() => {

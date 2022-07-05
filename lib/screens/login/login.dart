@@ -103,6 +103,8 @@ class _LoginPageState extends State<LoginPage> {
                                             'token', user.token!);
                                         sharedPreferences.setString(
                                             'type', user.roles![0]);
+                                        sharedPreferences.setString(
+                                            'name', user.name);
                                         var sharedType =
                                             sharedPreferences.getString('type');
                                         if (sharedType == "user") {

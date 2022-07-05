@@ -11,6 +11,11 @@ class BaseAPI {
   var detailsPath = api + "/providers";
   var postOrdersPath = api + "/orders";
   var getOrdersPath = api + "/orders";
+  var editCategoriesPath = api + "/categories";
+  var getMyProductsPath = api + "/my-products";
+  var productsPath = api + "/products";
+  var productOrdersPath = api + "/get-product-orders";
+  var changeStatusPath = api + "/update-status-order-taken";
 
 
   Map<String, String> headers = {

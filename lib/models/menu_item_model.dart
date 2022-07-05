@@ -15,9 +15,10 @@ class MenuItem extends Equatable{
   final String ? photo;
   final String  ? expire;
   final bool  ? status;
+  final int ? itemsLeft;
 //  final Category category;
 
-  MenuItem({ required this.id,  required this.expire,  required this.status, required this.shopId, required this.name, required this.description, required this.photo,});
+  MenuItem({ required this.id,  required this.expire,  required this.status, required this.shopId, required this.name, required this.description, required this.photo, required this.itemsLeft});
 
   @override
   // TODO: implement props
@@ -31,6 +32,7 @@ class MenuItem extends Equatable{
     photo: json["Photo"],
     expire: json["Expire"],
     description: json["Description"],
+    itemsLeft: json["ItemsLeft"],
   //  category: Category.fromJson(json["Category"]),
   );
 

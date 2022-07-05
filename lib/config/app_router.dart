@@ -7,7 +7,9 @@ import 'package:food_app/screens/location//location_screen.dart';
 import 'package:food_app/screens/shops_details/shop_details.dart';
 
 import '../models/shop_model.dart';
+import '../screens/admin/categories/categories_edit.dart';
 import '../screens/filter/filter.dart';
+import '../screens/provider/providersOrders.dart';
 import '../screens/shop_listing/shop_listing_screen.dart';
 import '../screens/shops/shop.dart';
 
@@ -20,6 +22,8 @@ class AppRouter{
         return HomeScreen.route();
       case LocationScreen.routeName:
         return LocationScreen.route();
+      case CategoryEdit.routeName:
+        return CategoryEdit.route();
       case FilterScreen.routeName:
         return FilterScreen.route();
       case ShopScreen.routeName:
@@ -27,7 +31,10 @@ class AppRouter{
       case ShopDetailsScreen.routeName:
         return ShopDetailsScreen.route(
           shop:settings.arguments as User,
-
+        );
+      case ProductOrdersScreen.routeName:
+        return ProductOrdersScreen.route(
+          id:settings.arguments as int,
         );
       case BasketScreen.routeName:
         return BasketScreen.route();

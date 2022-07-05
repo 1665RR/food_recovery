@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:food_app/api/api_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/category_model.dart';
-import '../models/shop_model.dart';
 import '../models/user_model.dart';
 
 class CategoryBox extends StatefulWidget {
@@ -30,8 +29,6 @@ class _CategoryBoxState extends State<CategoryBox> {
     var sharedToken = sharedPreferences.getString('token');
     _shops = (await ApiService().searchCategories(sharedToken!, widget.category.id));
  // Future.delayed(const Duration(seconds: 1)).then((value) => setState(() {}));
-    print(_shops);
-    print(widget.category.image);
   }
 
   @override

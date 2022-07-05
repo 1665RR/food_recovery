@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:food_app/api/api_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../blocs/basket/basket_bloc.dart';
-import '../../models/shop_model.dart';
+
 import '../../models/user_model.dart';
 import '../../widgets/shop_information.dart';
 
