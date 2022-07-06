@@ -158,6 +158,38 @@ class _HomeScreenState extends State<HomeScreen> {
                 }
               },
             ),
+            const SizedBox(
+              height: 270,
+            ),
+            const SizedBox(
+                height: 15.0,
+                child: Text("Are you shop owner?", textAlign: TextAlign.center,),
+            ),
+            const SizedBox(
+                height: 15.0,
+                child: Text("Send e-mail to become provider.", textAlign: TextAlign.center,),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                final SharedPreferences sharedPreferences =
+                    await SharedPreferences.getInstance();
+                var sharedToken = sharedPreferences.getString('token');
+                try {
+                  var req = await ApiService().sendEmail(sharedToken!);
+                  if (req.statusCode == 200) {
+                    print("Success");
+                  } else {
+                    print(req.statusCode);
+                  }
+                } on Exception catch (e) {
+                  print(e);
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                primary: Colors.grey,
+              ),
+              child: Text("Send email"),
+            ),
           ],
         ),
       ),

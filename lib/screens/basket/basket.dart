@@ -46,9 +46,6 @@ print(_basket);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Basket'),
-        actions: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.edit)),
-        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -120,7 +117,7 @@ print(_basket);
                                     ),
                                     Expanded(
                                       child: Text(
-                                        '${_basket![index].menuItem!.name}',
+                                        '${_basket![index].menuItem?.name}',
                                         style:
                                             Theme.of(context).textTheme.headline6,
                                       ),

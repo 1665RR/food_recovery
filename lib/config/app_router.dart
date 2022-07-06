@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:food_app/models/user_model.dart';
 import 'package:food_app/screens/basket/basket.dart';
@@ -6,8 +5,6 @@ import 'package:food_app/screens/home/home_screen.dart';
 import 'package:food_app/screens/location//location_screen.dart';
 import 'package:food_app/screens/shops_details/shop_details.dart';
 
-import '../models/shop_model.dart';
-import '../screens/admin/categories/categories_edit.dart';
 import '../screens/filter/filter.dart';
 import '../screens/provider/providersOrders.dart';
 import '../screens/shop_listing/shop_listing_screen.dart';
@@ -22,8 +19,6 @@ class AppRouter{
         return HomeScreen.route();
       case LocationScreen.routeName:
         return LocationScreen.route();
-      case CategoryEdit.routeName:
-        return CategoryEdit.route();
       case FilterScreen.routeName:
         return FilterScreen.route();
       case ShopScreen.routeName:

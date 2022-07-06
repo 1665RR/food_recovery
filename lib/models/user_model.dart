@@ -6,7 +6,9 @@ List<User> shopModelFromJson(String str) =>
     List<User>.from(json.decode(str)
         .map((x) => User.fromJson(x)));
 
-
+List<User> usersFromJson(String str) =>
+    List<User>.from(json.decode(str)
+        .map((x) => User.fromJsonUser(x)));
 
 User detailsModelFromJson(String str) => User.fromJsonDetails(json.decode(str));
 
@@ -44,6 +46,15 @@ class User {
       roles: List<String>.from(json['roles'].map((x) => x)),
     );
   }
+
+  factory User.fromJsonUser(Map<String, dynamic> json) => User(
+    id: json['Id'],
+    email: json['Email'],
+    name: json['Username'],
+    phone: json['Phone'],
+    address: json['Address'],
+    //roles: List<String>.from(json['roles'].map((x) => x)),
+  );
 
   factory User.fromJson(Map<String, dynamic> json) => User(
     id: json['Id'],

@@ -40,7 +40,7 @@ class _AddProductWidgetState extends State<AddProductWidget> {
   }
 
   Future getImage() async {
-    var image = await ImagePicker().getImage(source: ImageSource.gallery);
+    var image = await ImagePicker().pickImage(source: ImageSource.gallery);
 
     setState(() {
       selectedImage = File(image!.path);

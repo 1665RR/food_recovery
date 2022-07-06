@@ -202,4 +202,72 @@ class ApiService extends BaseAPI {
     }
   }
 
+  Future<List<User>> fetchUsersList(String token) async {
+    final response = await http.get(Uri.parse(super.usersPath), headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+    });
+    if (response.statusCode == 200) {
+      print(response.body);
+      List<User> _model = usersFromJson(response.body);
+      return _model;
+    } else {
+      print(response.body);
+      throw Exception('Failed to load users!');
+    }
+  }
+
+  addCategory(String token, String name,  File icon) async {
+
+    var postUri = Uri.parse(super.categoriesPath);
+    Map<String, String> headers = { 'Authorization': 'Bearer $token'};
+    var request = http.MultipartRequest("POST", postUri);
+    request.headers.addAll(headers);
+    request.fields["name"] = name;
+    var multipartFile =  await http.MultipartFile.fromPath(
+      'icon', icon.path,
+      contentType: MediaType('image', 'jpeg'),
+    );
+    request.files.add(multipartFile);
+    http.Response response = await http.Response.fromStream(await request.send());
+
+    print("Result: ${jsonDecode(response.body)}");
+    return response;
+
+  }
+
+  Future<http.Response> deleteUsers(String token, int id,) async {
+    final response =
+    await http.delete(Uri.parse(super.usersPath + "/$id"), headers: {
+      'Authorization': 'Bearer $token',
+    });
+
+    if (response.statusCode == 200) {
+      print(response.body);
+      return(response);
+    } else {
+      print(response.body);
+      throw Exception('Failed to delete users!');
+    }
+  }
+
+  Future<http.Response> sendEmail(String token) async {
+
+    http.Response response =
+    await http.get(Uri.parse(super.sendEmailPath), headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+    });
+
+    if (response.statusCode == 200) {
+      print(response.body);
+      return(response);
+    } else {
+      print(response.body);
+      throw Exception('Failed to send email!');
+    }
+  }
+
 }

@@ -132,7 +132,8 @@ class _ShopDetailsScreenState extends State<ShopDetailsScreen> {
                           width: 40,
                           child: Builder(
                             builder: (BuildContext context) {
-                              return IconButton(
+                              return (menuItem.itemsLeft! >0 ) ?
+                                IconButton(
                                 icon: Icon(
                                   Icons.add_circle,
                                   color:
@@ -146,7 +147,7 @@ class _ShopDetailsScreenState extends State<ShopDetailsScreen> {
                                     var req =
                                     await ApiService().postOrders(sharedToken!,menuItem.id, 1);
                                     if (req.statusCode == 200) {
-                                      print("Order succesfully added");
+                                      print("Order successfully added");
                                     } else {
                                       print(req.body);
                                     }
@@ -154,7 +155,20 @@ class _ShopDetailsScreenState extends State<ShopDetailsScreen> {
                                     print(e.toString());
                                     print('catched error');
                                   }
-                                 // context.read<BasketBloc>().add(AddItem(menuItem));
+                                },
+                              )
+                              :
+                              IconButton(
+                                icon: const Icon(
+                                  Icons.error,
+                                  color:
+                                  Colors.grey,
+                                ),
+                                onPressed: ()  {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                              const SnackBar(
+                                                  content: Text(
+                                                      'No more Items left')));
                                 },
                               );
                             },

@@ -18,7 +18,7 @@ class Basket extends Equatable{
      required this.productId,
      required this.userId,
      required this.menuItem,
-     required this.user,
+      this.user,
 
    });
 
@@ -32,6 +32,17 @@ class Basket extends Equatable{
    final User ? user;
 
    factory Basket.fromJson(Map<String, dynamic> json) => Basket(
+     id: json["Id"] == null ? null : json["Id"],
+     productQuantity: json["ProductQuantity"] == null ? null : json["ProductQuantity"],
+     status: json["Status"] == null ? null : json["Status"],
+     address: json["Address"] ?? null,
+     productId: json["ProductId"] ?? 0,
+     userId: json["UserId"] == null ? null : json["UserId"],
+     menuItem: json["Product"] == null ? null : itemMenu.MenuItem.fromJson(json["Product"]),
+
+   );
+
+   factory Basket.fromJsonUser(Map<String, dynamic> json) => Basket(
      id: json["Id"] == null ? null : json["Id"],
      productQuantity: json["ProductQuantity"] == null ? null : json["ProductQuantity"],
      status: json["Status"] == null ? null : json["Status"],

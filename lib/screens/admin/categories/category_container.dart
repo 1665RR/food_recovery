@@ -18,30 +18,19 @@ class CategoryDetails extends StatefulWidget {
 
 class _CategoryDetailsState extends State<CategoryDetails> {
 
-  late List<Category>? _categories = [];
 
   @override
   void initState(){
     super.initState();
   }
 
-  Future _editCategories() async{
-    // final SharedPreferences sharedPreferences =
-    // await SharedPreferences.getInstance();
-    // var sharedToken = sharedPreferences.getString('token');
-    // _categories = (await ApiService().searchCategories(sharedToken!, widget.category.id));
-    //  Future.delayed(const Duration(seconds: 1)).then((value) => setState(() {}));
-  }
+
 
   @override
   Widget build(BuildContext context) {
 
     return InkWell(
-      onTap: () async{
-        await _editCategories();
-        Navigator.pushNamed(
-            context, '/categories-edit',
-            );
+      onTap: () {
       },
       child:Container(
         width: 88,

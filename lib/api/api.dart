@@ -16,6 +16,9 @@ class BaseAPI {
   var productsPath = api + "/products";
   var productOrdersPath = api + "/get-product-orders";
   var changeStatusPath = api + "/update-status-order-taken";
+  var usersPath = api + "/users";
+  var sendEmailPath = api + "/send-email-to-admin";
+
 
 
   Map<String, String> headers = {
