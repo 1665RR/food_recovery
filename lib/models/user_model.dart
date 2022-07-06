@@ -24,11 +24,13 @@ class User {
   String ? description;
   List <MenuItem> ? menuItem;
   List <String> ? roles;
+   List<Role> ? role;
+
 
 
   User({this.id, this.email, this.address,  required this.name,  this.token,
      this.phone,  this.photo, this.description, this.menuItem,
-     this.roles
+     this.roles, this.role
   });
 
   factory User.fromReqBody(String body) {
@@ -52,8 +54,9 @@ class User {
     email: json['Email'],
     name: json['Username'],
     phone: json['Phone'],
+    photo: json['Photo'],
     address: json['Address'],
-    //roles: List<String>.from(json['roles'].map((x) => x)),
+    role: List<Role>.from(json["Roles"].map((x) => Role.fromJson(x))),
   );
 
   factory User.fromJson(Map<String, dynamic> json) => User(
@@ -90,3 +93,39 @@ class User {
   // TODO: implement props
   List<Object?> get props => throw UnimplementedError();
 }
+
+class Role {
+  Role({
+    required this.id,
+    required this.name,
+    required this.userRoles,
+  });
+
+  final int id;
+  final String name;
+  final UserRoles userRoles;
+
+  factory Role.fromJson(Map<String, dynamic> json) => Role(
+    id: json["Id"],
+    name: json["Name"],
+    userRoles: UserRoles.fromJson(json["user_roles"]),
+  );
+
+}
+
+class UserRoles {
+  UserRoles({
+    required this.roleId,
+    required this.userId,
+  });
+
+  final int roleId;
+  final int userId;
+
+  factory UserRoles.fromJson(Map<String, dynamic> json) => UserRoles(
+    roleId: json["roleId"],
+    userId: json["userId"],
+  );
+
+}
+

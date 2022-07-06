@@ -18,6 +18,7 @@ class BaseAPI {
   var changeStatusPath = api + "/update-status-order-taken";
   var usersPath = api + "/users";
   var sendEmailPath = api + "/send-email-to-admin";
+  var addToProviderpath = api + "/addtoprovider";
 
 
 

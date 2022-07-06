@@ -5,6 +5,7 @@ import 'package:food_app/models/menu_item_model.dart' as itemMenu;
 import 'package:food_app/models/user_model.dart';
 
 List<Basket> basketFromJson(String str) => List<Basket>.from(json.decode(str).map((x) => Basket.fromJson(x)));
+List<Basket> basketFromJsonUser(String str) => List<Basket>.from(json.decode(str).map((x) => Basket.fromJsonUser(x)));
 
 class Basket extends Equatable{
 

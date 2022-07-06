@@ -179,7 +179,7 @@ class ApiService extends BaseAPI {
     });
     if (response.statusCode == 200) {
       print(response.body);
-      List<Basket> _model = basketFromJson(response.body);
+      List<Basket> _model = basketFromJsonUser(response.body);
       return _model;
     } else {
       print(response.body);
@@ -268,6 +268,23 @@ class ApiService extends BaseAPI {
       print(response.body);
       throw Exception('Failed to send email!');
     }
+  }
+
+  Future<http.Response> addToProvider(String token, String email) async {
+    var body = jsonEncode({
+      "email": email,
+    }).replaceAll(r'\', r'');
+    print(body);
+    http.Response response = await http.post(
+      Uri.parse(super.addToProviderpath),
+      headers: {
+        'Accept': '*/*',
+        'Authorization': 'Bearer $token',
+      },
+      body: body,
+    );
+    print(jsonDecode(response.body));
+    return response;
   }
 
 }
