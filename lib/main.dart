@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:food_app/blocs/basket/basket_bloc.dart';
 import 'package:food_app/config/theme.dart';
-import 'package:food_app/models/user_model.dart';
-import 'package:food_app/screens/home/home_screen.dart';
 import 'package:food_app/screens/splash/splash.dart';
 
-import 'blocs/bloc.dart';
 import 'config/app_router.dart';
 
 void main() async {

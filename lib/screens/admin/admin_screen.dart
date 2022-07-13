@@ -12,6 +12,8 @@ import 'categories/category_container.dart';
 class AdminScreen extends StatefulWidget {
   static const String routeName = '/';
 
+  AdminScreen({Key? key}) : super(key: key);
+
   static Route route() {
     return MaterialPageRoute(
       builder: (_) => AdminScreen(),
@@ -113,6 +115,7 @@ class _AdminScreenState extends State<AdminScreen> {
             ),
             ListView.builder(
               shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
               itemCount: _users == null ? 0 : _users.length,
               itemBuilder: (BuildContext context, int index) {
                 return Card(
@@ -145,33 +148,41 @@ class _AdminScreenState extends State<AdminScreen> {
                               ],
                             ),
                             const SizedBox(width: 5,),
-                           //  _users[index].role![0].id == 1
-                           //      ?
-                           // TextButton(
-                           //     onPressed: () async {
-                           //       final SharedPreferences sharedPreferences =
-                           //       await SharedPreferences.getInstance();
-                           //       var sharedToken = sharedPreferences.getString('token');
-                           //       try {
-                           //         var req = await ApiService().addToProvider(sharedToken!, _users[index].email!);
-                           //         if (req.statusCode == 200) {
-                           //           ScaffoldMessenger.of(context).showSnackBar(
-                           //               const SnackBar(
-                           //                   content: Text(
-                           //                       'User added to providers!')));
-                           //           _getUsers();
-                           //         } else {
-                           //           print(req.statusCode);
-                           //         }
-                           //       } on Exception catch (e) {
-                           //         print(e);
-                           //       }
-                           //     },
-                           //     child: Text("ADD"),
-                           // )
-                           //      :
-                                SizedBox(width: 40, child: Text(
-                                "${_users[index].role![0].name}")),
+                            _users[index].role![0].id == 1
+                                ?
+                           TextButton(
+                               onPressed: () async {
+                                 final SharedPreferences sharedPreferences =
+                                 await SharedPreferences.getInstance();
+                                 var sharedToken = sharedPreferences.getString('token');
+                                 try {
+                                   var req = await ApiService().addToProvider(sharedToken!, _users[index].email!);
+                                   if (req.statusCode == 200) {
+                                     ScaffoldMessenger.of(context).showSnackBar(
+                                         const SnackBar(
+                                             content: Text(
+                                                 'User added to providers!')));
+                                     _getUsers();
+                                   } else {
+                                     print(req.statusCode);
+                                   }
+                                 } on Exception catch (e) {
+                                   print(e);
+                                 }
+                               },
+                               child: Text("ADD"),
+                           )
+                                :
+                                Container(
+                                  width: 50,
+                                    child: Text(
+                                "${_users[index].role![0].name}", textAlign: TextAlign.center,),
+                                  decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.green),
+                                  ),
+                                  padding: const EdgeInsets.all(4.0),
+                                  margin: const EdgeInsets.only(left:5.0),
+                                ),
                             IconButton(
                                 onPressed: () async {
                                   final SharedPreferences sharedPreferences =
@@ -195,7 +206,7 @@ class _AdminScreenState extends State<AdminScreen> {
                                     print('catched error');
                                   }
                                 },
-                                icon: Icon(Icons.delete)),
+                                icon: const Icon(Icons.delete)),
                           ],
                         ),
                       ),
@@ -206,11 +217,7 @@ class _AdminScreenState extends State<AdminScreen> {
         ),
       ),
       drawer: Drawer(
-        // Add a ListView to the drawer. This ensures the user can scroll
-        // through the options in the drawer if there isn't enough vertical
-        // space to fit everything.
         child: ListView(
-          // Important: Remove any padding from the ListView.
           padding: EdgeInsets.zero,
           children: [
             const DrawerHeader(
@@ -229,7 +236,7 @@ class _AdminScreenState extends State<AdminScreen> {
               },
             ),
             ElevatedButton(
-              child: Text('Log Out'),
+              child: const Text('Log Out'),
               onPressed: () async {
                 final SharedPreferences sharedPreferences =
                 await SharedPreferences.getInstance();

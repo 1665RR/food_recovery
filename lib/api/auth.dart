@@ -37,7 +37,6 @@ class AuthAPI extends BaseAPI {
   }
 
   Future<http.Response> logout(String token) async {
-
     http.Response response =
         await http.get(Uri.parse(super.logoutPath), headers: {
       'Content-Type': 'application/json',

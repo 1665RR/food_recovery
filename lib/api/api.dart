@@ -1,5 +1,3 @@
-
-
 class BaseAPI {
   static String api = "http://10.0.2.2:8080";
   var signupPath = api + "/signup";
@@ -18,14 +16,9 @@ class BaseAPI {
   var changeStatusPath = api + "/update-status-order-taken";
   var usersPath = api + "/users";
   var sendEmailPath = api + "/send-email-to-admin";
-  var addToProviderpath = api + "/addtoprovider";
-
-
+  var addToProviderPath = api + "/addtoprovider";
 
   Map<String, String> headers = {
     "Content-Type": "application/json; charset=UTF-8"
   };
-
 }
-
-

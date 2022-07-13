@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:food_app/widgets/shop_tags.dart';
-
-import '../models/shop_model.dart';
 import '../models/user_model.dart';
 
 class ShopInformation extends StatelessWidget {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:food_app/api/api_services.dart';
+import 'package:number_inc_dec/number_inc_dec.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -29,6 +30,8 @@ class ShopDetailsScreen extends StatefulWidget {
 }
 
 class _ShopDetailsScreenState extends State<ShopDetailsScreen> {
+
+  int quantity = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -114,49 +117,68 @@ class _ShopDetailsScreenState extends State<ShopDetailsScreen> {
                 Container(
                   color: Colors.white,
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 20,
+                    horizontal: 10,
                   ),
                   child: ListTile(
-                    dense: true,
+                    dense: false,
                     contentPadding: EdgeInsets.zero,
                     title: Text(menuItem.name,
                         style: Theme.of(context).textTheme.headline5),
                     subtitle: Text(menuItem.description!,
                         style: Theme.of(context).textTheme.bodyText1),
                     trailing: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Container(
-                          height:150,
-                          width: 40,
+                        SizedBox(
+                          width: 130,
+                          height: 200,
                           child: Builder(
                             builder: (BuildContext context) {
                               return (menuItem.itemsLeft! >0 ) ?
-                                IconButton(
-                                icon: Icon(
-                                  Icons.add_circle,
-                                  color:
-                                  Theme.of(context).colorScheme.secondary,
-                                ),
-                                onPressed: () async {
-                                  final SharedPreferences sharedPreferences =
-                                  await SharedPreferences.getInstance();
-                                  var sharedToken = sharedPreferences.getString('token');
-                                  try {
-                                    var req =
-                                    await ApiService().postOrders(sharedToken!,menuItem.id, 1);
-                                    if (req.statusCode == 200) {
-                                      print("Order successfully added");
-                                    } else {
-                                      print(req.body);
-                                    }
-                                  } on Exception catch (e) {
-                                    print(e.toString());
-                                    print('catched error');
-                                  }
-                                },
-                              )
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      flex:1,
+                                      child: NumberInputWithIncrementDecrement(
+                                        controller: TextEditingController(),
+                                        min: 1,
+                                        max: menuItem.itemsLeft!,
+                                        onIncrement: (num newlyIncrementedValue) {
+                                          quantity = newlyIncrementedValue.toInt();
+                                        },
+                                        onDecrement: (num newlyDecrementedValue) {
+                                          quantity = newlyDecrementedValue.toInt();
+                                        },
+                                      ),
+                                    ),
+                                    IconButton(
+                                    icon: Icon(
+                                      Icons.add_circle,
+                                      color:
+                                      Theme.of(context).colorScheme.secondary,
+                                    ),
+                                    onPressed: () async {
+                                      final SharedPreferences sharedPreferences =
+                                      await SharedPreferences.getInstance();
+                                      var sharedToken = sharedPreferences.getString('token');
+                                      print('Quantity $quantity');
+                                      try {
+                                        var req =
+                                        await ApiService().postOrders(sharedToken!,menuItem.id, quantity);
+                                        if (req.statusCode == 200) {
+                                          print("Order successfully added");
+                                        } else {
+                                          print(req.body);
+                                        }
+                                      } on Exception catch (e) {
+                                        print(e.toString());
+                                        print('catched error');
+                                      }
+                                    },
+                              ),
+                                  ],
+                                )
                               :
                               IconButton(
                                 icon: const Icon(

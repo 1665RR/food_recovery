@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -8,7 +7,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AddCategoryWidget extends StatefulWidget {
   const AddCategoryWidget({Key? key}) : super(key: key);
-
 
   @override
   _AddCategoryWidgetState createState() => _AddCategoryWidgetState();
@@ -25,12 +23,12 @@ class _AddCategoryWidgetState extends State<AddCategoryWidget> {
   final _dateInputController = TextEditingController();
   final _itemsController = TextEditingController();
   final _categoryController = TextEditingController();
-  late  var  multipartFile;
+  late var multipartFile;
 
   late final File selectedImage;
   Future<void> _openImagePicker() async {
     final XFile? pickedImage =
-    (await _picker.pickImage(source: ImageSource.gallery));
+        (await _picker.pickImage(source: ImageSource.gallery));
     if (pickedImage != null) {
       setState(() {
         _image = File(pickedImage.path);
@@ -46,7 +44,6 @@ class _AddCategoryWidgetState extends State<AddCategoryWidget> {
     });
   }
 
-
   @override
   void initState() {
     _dateInputController.text = ""; //set the initial value of text field
@@ -57,24 +54,24 @@ class _AddCategoryWidgetState extends State<AddCategoryWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Category'),
+        title: const Text('Add Category'),
       ),
       body: Form(
         key: _addFormKey,
         child: SingleChildScrollView(
           child: Container(
-            padding: EdgeInsets.all(20.0),
+            padding: const EdgeInsets.all(20.0),
             child: Card(
                 child: Container(
-                    padding: EdgeInsets.all(10.0),
+                    padding: const EdgeInsets.all(10.0),
                     width: 440,
                     child: Column(
                       children: <Widget>[
                         Container(
-                          margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                          margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
                           child: Column(
                             children: <Widget>[
-                              Text('Name'),
+                              const Text('Name'),
                               TextFormField(
                                 controller: _nameController,
                                 decoration: const InputDecoration(
@@ -115,31 +112,28 @@ class _AddCategoryWidgetState extends State<AddCategoryWidget> {
                           ),
                         ),
                         Container(
-                          margin: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                          margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
                           child: Column(
                             children: <Widget>[
                               ElevatedButton(
                                 onPressed: () async {
                                   final SharedPreferences sharedPreferences =
-                                  await SharedPreferences.getInstance();
+                                      await SharedPreferences.getInstance();
                                   var sharedToken =
-                                  sharedPreferences.getString('token');
+                                      sharedPreferences.getString('token');
                                   if (_addFormKey.currentState!.validate()) {
                                     _addFormKey.currentState!.save();
                                     try {
-                                      var req =
-                                      await ApiService().addCategory(
+                                      var req = await ApiService().addCategory(
                                         sharedToken!,
                                         _nameController.text,
                                         _image!,
                                       );
                                       if (req.statusCode == 200) {
-                                        ScaffoldMessenger.of(context).showSnackBar(
-                                            const SnackBar(
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(const SnackBar(
                                                 content: Text(
-                                                    'Category added successfully!')
-                                            )
-                                        );
+                                                    'Category added successfully!')));
                                         print(req.body);
                                         Navigator.pop(context);
                                       } else {
@@ -155,8 +149,7 @@ class _AddCategoryWidgetState extends State<AddCategoryWidget> {
                                     style: TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold,
-                                        color: Colors.white
-                                    )),
+                                        color: Colors.white)),
                               )
                             ],
                           ),

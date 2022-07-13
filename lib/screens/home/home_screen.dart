@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:food_app/models/category_model.dart';
 import 'package:food_app/screens/login/login.dart';
-import 'package:food_app/widgets/food_search.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../api/auth.dart';
@@ -15,10 +14,11 @@ import '../../widgets/shop_card.dart';
 class HomeScreen extends StatefulWidget {
   static const String routeName = '/';
 
+  const HomeScreen({Key? key}) : super(key: key);
 
   static Route route() {
     return MaterialPageRoute(
-      builder: (_) => HomeScreen(),
+      builder: (_) => const HomeScreen(),
       settings: const RouteSettings(name: routeName),
     );
   }
@@ -28,12 +28,11 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   final AuthAPI _authAPI = AuthAPI();
-
 
   late List<Category>? _categories = [];
   late List<User>? _providers = [];
+  late List<User>? _searchProviders = [];
 
   @override
   void initState() {
@@ -42,22 +41,28 @@ class _HomeScreenState extends State<HomeScreen> {
     _getProviders();
   }
 
+  onSearch(String search) {
+    setState(() {
+      _searchProviders = _providers!
+          .where((user) => user.name.toLowerCase().contains(search))
+          .toList();
+    });
+  }
+
   void _getCategories() async {
     final SharedPreferences sharedPreferences =
-    await SharedPreferences.getInstance();
+        await SharedPreferences.getInstance();
     var sharedToken = sharedPreferences.getString('token');
     _categories = (await ApiService().fetchCategories(sharedToken!));
     Future.delayed(const Duration(seconds: 1)).then((value) => setState(() {}));
-
   }
 
   void _getProviders() async {
     final SharedPreferences sharedPreferences =
-    await SharedPreferences.getInstance();
+        await SharedPreferences.getInstance();
     var sharedToken = sharedPreferences.getString('token');
     _providers = (await ApiService().fetchProviders(sharedToken!));
     Future.delayed(const Duration(seconds: 1)).then((value) => setState(() {}));
-
   }
 
   @override
@@ -95,7 +100,40 @@ class _HomeScreenState extends State<HomeScreen> {
                     }),
               ),
             ),
-            const FoodSearchBox(),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      onChanged: (value) => onSearch(value),
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: Colors.white,
+                        hintText: 'Search for food',
+                        suffixIcon: Icon(
+                          Icons.search,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                        contentPadding: const EdgeInsets.only(
+                          left: 20.0,
+                          bottom: 5.0,
+                          top: 12.0,
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(color: Colors.white),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        enabledBorder: UnderlineInputBorder(
+                          borderSide: const BorderSide(color: Colors.white),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Align(
@@ -106,14 +144,23 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: _providers!.length,
-              itemBuilder: (context, index) {
-                return ShopCard(shop: _providers![index]);
-              },
-            ),
+            _searchProviders!.isEmpty
+                ? ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: _providers!.length,
+                    itemBuilder: (context, index) {
+                      return ShopCard(shop: _providers![index]);
+                    },
+                  )
+                : ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: _searchProviders!.length,
+                    itemBuilder: (context, index) {
+                      return ShopCard(shop: _searchProviders![index]);
+                    },
+                  ),
           ],
         ),
       ),
@@ -125,19 +172,16 @@ class _HomeScreenState extends State<HomeScreen> {
               decoration: BoxDecoration(
                 color: Colors.green,
               ),
-              child: Text('Food rescue'),
+              child: Text('2Good2Throw'),
             ),
             ListTile(
               title: const Text('Home Page'),
               onTap: () {
-                // Update the state of the app
-                // ...
-                // Then close the drawer
                 Navigator.pop(context);
               },
             ),
             ElevatedButton(
-              child: Text('Log Out'),
+              child: const Text('Log Out'),
               onPressed: () async {
                 final SharedPreferences sharedPreferences =
                     await SharedPreferences.getInstance();
@@ -162,12 +206,18 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 270,
             ),
             const SizedBox(
-                height: 15.0,
-                child: Text("Are you shop owner?", textAlign: TextAlign.center,),
+              height: 15.0,
+              child: Text(
+                "Are you shop owner?",
+                textAlign: TextAlign.center,
+              ),
             ),
             const SizedBox(
-                height: 15.0,
-                child: Text("Send e-mail to become provider.", textAlign: TextAlign.center,),
+              height: 15.0,
+              child: Text(
+                "Send e-mail to become provider.",
+                textAlign: TextAlign.center,
+              ),
             ),
             ElevatedButton(
               onPressed: () async {
@@ -188,7 +238,7 @@ class _HomeScreenState extends State<HomeScreen> {
               style: ElevatedButton.styleFrom(
                 primary: Colors.grey,
               ),
-              child: Text("Send email"),
+              child: const Text("Send email"),
             ),
           ],
         ),

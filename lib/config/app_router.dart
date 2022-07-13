@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:food_app/models/user_model.dart';
 import 'package:food_app/screens/basket/basket.dart';
 import 'package:food_app/screens/home/home_screen.dart';
-import 'package:food_app/screens/location//location_screen.dart';
 import 'package:food_app/screens/shops_details/shop_details.dart';
 
 import '../screens/filter/filter.dart';
@@ -17,8 +16,6 @@ class AppRouter{
     switch(settings.name) {
       case '/':
         return HomeScreen.route();
-      case LocationScreen.routeName:
-        return LocationScreen.route();
       case FilterScreen.routeName:
         return FilterScreen.route();
       case ShopScreen.routeName:
